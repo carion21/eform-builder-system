@@ -33,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const SESSION_SECRET = process.env.SESSION_SECRET
 const age = 48 * 60 * 60 * 1000 // 48 hours
 const modactuel = process.env.NODE_ENV || 'development'
+console.log('modactuel', modactuel);
+
 
 if (modactuel == "development") {
   const client = redis.createClient()
