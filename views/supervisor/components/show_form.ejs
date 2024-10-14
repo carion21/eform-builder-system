@@ -1,0 +1,60 @@
+<div class="container mt-5 mb-5 border border-secondary rounded">
+
+  
+
+  <% if (locals.error) { %>
+
+    <div class="alert alert-danger alert-dismissible fade show mt-3 mb-3" role="alert">
+      <strong>
+        <%= error %> !
+      </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+  <% } %>
+
+  <% if (locals.message) { %>
+
+    <div class="alert alert-success alert-dismissible fade show mt-3 mb-3" role="alert">
+      <strong>
+        <%= message %> !
+      </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+  <% } %>
+
+  <form method="post" action="/supervisor/fillkpi/<%= project.id %>">
+
+    <% for (kpi of kpis) { %>
+      <div class="card mb-3 mt-2" data-uuid="<%= kpi.slug %>" style="transition: transform 0.2s;">
+        <div class="card-header">
+          <%= kpi.name %> -
+          <span class="text-danger">
+            ( Ce champ est obligatoire )
+          </span>
+        </div>
+        <div class="card-body">
+          <div>
+            <input type="number"
+              class="form-control form-control-lg" id="<%= kpi.slug %>"
+              name="<%= kpi.slug %>"
+              value="<% if (locals.rbody) { %><%= locals.rbody[kpi.slug] %><% } %>"
+              required>
+          </div>
+        </div>
+      </div>
+    <% } %>
+    <hr>
+    <div class="row justify-content-around mb-3">
+      <button type="reset" class="btn btn-danger btn-lg col-md-3">
+        Effacer le formulaire
+      </button>
+      <button type="submit" class="btn btn-outline-primary btn-lg col-md-3">
+        Envoyer les données
+      </button>
+    </div>
+
+  </form>
+
+</div>

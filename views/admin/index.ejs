@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<%- include('./base/head') %>
+
+  <body>
+
+    <!-- Navbar -->
+    <%- include('./base/navbar') %>
+
+    <!-- Form Builder Section -->
+    <% if (locals.template == "creator") { %>
+      <%- include('./creator') %>
+    <% } %>
+    <% if (locals.template == "editor") { %>
+      <%- include('./editor') %>
+    <% } %>
+
+    <%- include('./base/script') %>
+  </body>
+
+</html>

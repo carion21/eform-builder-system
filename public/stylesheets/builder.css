@@ -1,0 +1,32 @@
+.navbar-brand img {
+    height: 40px;
+}
+
+.user-img {
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Styles pour la liste des champs */
+#fieldList {
+    min-height: 200px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+#fieldList .list-group-item {
+    cursor: move;
+    /* Changer le curseur pour indiquer le glisser-déposer */
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    /* background-color: #fff; */
+}
+
+/* #fieldList .list-group-item:hover { */
+    /* background-color: #f1f1f1; */
+/* } */
+
+.list-group-item {
+    padding: 10px;
+    border-radius: 4px;
+}

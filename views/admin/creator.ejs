@@ -1,0 +1,171 @@
+<!-- Alertes -->
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="saveSuccessAlert" style="display: none;">
+  <strong>Formulaire sauvegardé avec succès !</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Formulaire Dynamique</h2>
+      <div>
+        <button id="addFieldButton" type="button" class="btn btn-primary" data-bs-toggle="modal"
+          data-bs-target="#addFieldModal">
+          Ajouter un champ
+        </button>
+        <button id="resetButton" type="button" class="btn btn-danger" data-bs-toggle="modal"
+          data-bs-target="#resetFormModal">
+          Vider le formulaire
+        </button>
+        <button id="saveButton" type="button" class="btn btn-outline-success" 
+          data-bs-toggle="modal" data-bs-target="#saveFormModal">
+          <i class="fas fa-save me-2"></i>
+          Sauvegarder
+      </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
+        <form id="dynamicForm">
+          <!-- Les champs ajoutés dynamiquement seront ici -->
+          <!-- Liste des champs créés -->
+        </form>
+      </div>
+      <div class="col-md-4" style="border-left: 1px solid #ccc;">
+        <ul id="fieldList" class="list-group mt-3">
+          <!-- Les champs seront ajoutés ici -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Alertes -->
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="saveSuccessAlert" style="display: none;">
+  <strong>Formulaire sauvegardé avec succès !</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<!-- Modal pour ajouter un champ -->
+<div class="modal fade" id="addFieldModal" tabindex="-1" aria-labelledby="addFieldModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addFieldModalLabel">Ajouter un champ au formulaire</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addFieldForm">
+          <div class="mb-3">
+            <label for="fieldLabel" class="form-label">Label</label>
+            <input type="text" class="form-control" id="fieldLabel" required>
+          </div>
+          <div class="mb-3">
+            <label for="fieldDescription" class="form-label">Description</label>
+            <input type="text" class="form-control" id="fieldDescription">
+          </div>
+          <div class="mb-3">
+            <label for="fieldType" class="form-label">Type de champ</label>
+            <select class="form-control" id="fieldType">
+              <% for (ftype of ftypes) { %>
+                <option value="<%= ftype.value %>">
+                  <%= ftype.label %>
+                </option>
+                <% } %>
+            </select>
+          </div>
+          <div class="mb-3" id="selectValuesContainer" style="display: none;">
+            <label for="selectValues" class="form-label">Valeurs pour Select (séparées par des points-virgules)</label>
+            <input type="text" class="form-control" id="selectValues">
+          </div>
+          <div class="mb-3">
+            <label for="defaultValue" class="form-label">Valeur par défaut</label>
+            <input type="text" class="form-control" id="defaultValue">
+          </div>
+          <div class="mb-3">
+            <label for="exampleValue" class="form-label">Valeur Exemple</label>
+            <input type="text" class="form-control" id="exampleValue">
+          </div>
+          <div class="mb-3">
+            <label for="fieldOptional" class="form-label">Optionnel</label>
+            <select class="form-control" id="fieldOptional">
+              <option value="false">Non</option>
+              <option value="true">Oui</option>
+            </select>
+          </div>
+          <div class="row d-flex justify-content-between">
+            <button class="btn btn-danger col-md-3 d-none" id = "deleteFieldButton"
+              style="margin-left: 10px; margin-right: 10px;">
+              Supprimer
+            </button>
+            <button type="submit" class="btn btn-primary col-md-3"
+              style="margin-left: 10px; margin-right: 10px;">
+              Ajouter
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div class="modal fade" id="resetFormModal" tabindex="-1" aria-labelledby="resetFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resetFormModalLabel">Vider le formulaire</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        Êtes-vous sûr de vouloir vider le formulaire ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button id="resetFormButton" type="button" class="btn btn-danger">Vider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de sauvegarde -->
+<div class="modal fade" id="saveFormModal" tabindex="-1" aria-labelledby="saveFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="saveFormModalLabel">Sauvegarder le formulaire</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 d-none" id="saveFormErrorAlert">
+
+        </div>
+        <div class="mb-3">
+          <label for="formProject" class="form-label">Projet</label>
+          <select name="project" id="formProject" class="form-control" required>
+            <option value="">Aucun projet</option>
+            <% for (p of projects) { %>
+              <option value="<%= p.id %>">
+                <%= p.name %>  - <%= p.code %>
+              </option>
+            <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="formName" class="form-label">Nom du formulaire</label>
+          <input name="name" type="text" class="form-control" id="formName" required>
+        </div>
+        <div class="mb-3">
+          <label for="formDescription" class="form-label">Description</label>
+          <textarea name="description" id="formDescription" cols="30" rows="5" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button id="saveFormButton" type="button" class="btn btn-primary">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

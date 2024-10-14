@@ -1,0 +1,144 @@
+<div class="container mt-5 mb-5 border border-secondary rounded">
+
+  
+
+  <% if (locals.error) { %>
+
+    <div class="alert alert-danger alert-dismissible fade show mt-3 mb-3" role="alert">
+      <strong>
+        <%= error %> !
+      </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+  <% } %>
+
+  <% if (locals.message) { %>
+
+    <div class="alert alert-success alert-dismissible fade show mt-3 mb-3" role="alert">
+      <strong>
+        <%= message %> !
+      </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+  <% } %>
+
+  <form method="post" action="/sampler/store/<%= form.uuid %>">
+
+    <% const fields=form.Field %>
+    <% for (field of fields) { %>
+      <div class="card mb-3 mt-2" data-uuid="<%= field.uuid %>" style="transition: transform 0.2s;">
+        <div class="card-header">
+          <%= field.label %> -
+            <% if (field.optional) { %>
+              <span class="text-secondary">
+                ( Ce champ est optionnel )
+              </span>
+            <% } else { %>
+              <span class="text-danger">
+                ( Ce champ est obligatoire )
+              </span>
+            <% } %>
+        </div>
+        <div class="card-body">
+
+          <% if (
+            ['simple-text', 'email' , 'date' , 'uuid'].includes(field.fieldType.value)
+          ) { %>
+            <div>
+              <input type="<% if (field.fieldType.value === 'simple-text') { %>text<% } else { %><%= field.fieldType.value %><% } %>"
+                class="form-control form-control-lg" 
+                id="<%= field.uuid %>" 
+                placeholder="<%= field.exampleValue %>"
+                name="<%= field.slug %>"
+                value="<% if (locals.rbody) { %><%= locals.rbody[field.slug] %><% } else { %><%= field.defaultValue %><% } %>"
+                <% if (!field.optional) { %> required <% } %>>
+            </div>
+          <% } %>
+
+          <% if (
+            ['number' ,'integer' , 'float'].includes(field.fieldType.value)
+          ) { %>
+            <div>
+              <input type="number"
+                class="form-control form-control-lg" id="<%= field.uuid %>" placeholder="<%= field.exampleValue %>"
+                name="<%= field.slug %>"
+                value="<% if (locals.rbody) { %><%= locals.rbody[field.slug] %><% } else { %><%= field.defaultValue %><% } %>"
+                <% if (!field.optional) { %> required <% } %>>
+            </div>
+          <% } %>
+
+          <% if (
+            ['long-text'].includes(field.fieldType.value)
+          ) { %>
+            <div>
+              <textarea class="form-control form-control-lg" id="<%= field.uuid %>" placeholder="<%= field.exampleValue %>"
+                name="<%= field.slug %>"
+                rows="3" cols="50"
+                <% if (!field.optional) { %> required <% } %>><% if (locals.rbody) { %><%= locals.rbody[field.slug] %><% } else { %><%= field.defaultValue %><% } %></textarea>
+            </div>
+          <% } %>
+
+          <% if (
+            ['select'].includes(field.fieldType.value)
+          ) { %>
+            <% const options = field.selectValues.split(';') %>
+            <div>
+              <select class="form-control form-control-lg" id="<%= field.uuid %>"
+                name="<%= field.slug %>"
+                value="<% if (locals.rbody) { %><%= locals.rbody[field.slug] %><% } else { %><%= field.defaultValue %><% } %>"
+                <% if (!field.optional) { %> required <% } %>>
+                <option value="" selected disabled hidden>Choisissez une option</option>
+                <% for (option of options) { %>
+                  <% if (option === field.defaultValue) { %>
+                    <option value="<%= option %>" selected><%= option %></option>
+                  <% } else if (locals.rbody && locals.rbody[field.slug] === option) { %>
+                    <option value="<%= option %>" selected><%= option %></option>
+                  <% } else { %>
+                    <option value="<%= option %>"><%= option %></option>
+                  <% } %>
+                <% } %>
+              </select>
+            </div>
+          <% } %>
+
+          <% if (
+            ['boolean'].includes(field.fieldType.value)
+          ) { %>
+            <div>
+              <input type="checkbox" class="form-check-input form-check-lg" id="<%= field.uuid %>"
+                name="<%= field.slug %>"
+                value="<% if (locals.rbody) { %><%= locals.rbody[field.slug] %><% } else { %><%= field.defaultValue %><% } %>"
+                <% if(field.defaultValue == 'true') { %> checked <% } %>
+                <% if (!field.optional) { %> required <% } %>>
+              <label class="form-check label" for="<%= field.uuid %>">
+                <%= field.label %>
+              </label>
+          <% } %>
+
+          <% if (field.description) { %>
+            <small id="<%= field.uuid %>Help" class="form-text text-muted">
+              <span class="text-warning">
+                !?>
+              </span>
+              <%= field.description %>
+            </small>
+          <% } %>
+
+        </div>
+      </div>
+    <% } %>
+    <hr>
+    <div class="row justify-content-around mb-3">
+      <button type="reset" class="btn btn-danger btn-lg col-md-3">
+        Effacer le formulaire
+      </button>
+      <button type="submit" class="btn btn-outline-primary btn-lg col-md-3">
+        Envoyer les données
+      </button>
+    </div>
+
+  </form>
+
+</div>

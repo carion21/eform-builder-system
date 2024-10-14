@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="https://via.placeholder.com/30" alt="Logo" style="height: 40px;">
+        </a>
+        <a class="navbar-brand mx-auto">eForm Builder</a>
+        <div class="navbar-nav">
+            <span class="navbar-text text-grey text-capitalize">
+                <% if(user_data) { %>
+                    <%= user_data.lastname %> <%= user_data.firstname %>
+                <% } else{ %>
+                    Incognito
+                <% } %>
+            </span>
+            <div style="width: 10px;"></div>
+            <img src="<% if(user_data) { %><%= user_data.profilePicture %><% } else{ %>https://via.placeholder.com/30<% } %>" alt="User" class="rounded-circle" style="height: 40px;">
+            <div style="width: 10px;"></div>
+
+            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Modal de déconnexion -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Déconnexion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                Êtes-vous sûr de vouloir vous déconnecter ?
+                <hr>
+                <alert class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Les données non sauvegardées risquent d'être perdues.
+                </alert>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <a href="/security/logout" class="btn btn-danger">
+                    Oui, je confirme
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
