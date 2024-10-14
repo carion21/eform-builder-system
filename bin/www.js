@@ -13,7 +13,7 @@ const { PORT_SYSTEM, APP_NAME } = require('../config/consts');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || PORT_SYSTEM);
 app.set('port', port);
 
 /**

@@ -2,7 +2,7 @@
 class Consts {
     static NLIMIT = 10;
 
-    static PORT_SYSTEM = 9555
+    static PORT_SYSTEM = 3000
     static APP_NAME = "eFormBuilder"
     static APP_AUTHOR = "Carion21"
     static APP_VERSION = "1.0.0"
