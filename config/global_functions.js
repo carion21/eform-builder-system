@@ -348,6 +348,7 @@ const core_signin = (async (body) => {
 
   return result
 })
+
 const core_make_get_request = (async (
   { main_endpoint, suffix_endpoint, is_protected = false, jwt_token = "" }
 ) => {
@@ -667,7 +668,7 @@ const core_find_me = (async (jwt_token) => {
 
 const core_list_kpi = (async (jwt_token) => {
   return await core_make_get_request({
-    main_endpoint: process.env.ROUTE_OF_CORE_FOR_KPI,
+    main_endpoint: process.env.ROUTE_OF_CORE_FOR_KPI + "/result",
     suffix_endpoint: "",
     is_protected: true,
     jwt_token: jwt_token
@@ -681,6 +682,33 @@ const core_fill_kpi = (async (jwt_token, payload) => {
     is_protected: true,
     jwt_token: jwt_token,
     payload: payload
+  })
+})
+
+const core_get_kpi_data = (async (jwt_token, payload) => {
+  return await core_make_get_request({
+    main_endpoint: process.env.ROUTE_OF_CORE_FOR_KPI,
+    suffix_endpoint: "/data/" + payload.projectId,
+    is_protected: true,
+    jwt_token: jwt_token
+  })
+})
+
+const core_list_session = (async (jwt_token, payload) => {
+  return await core_make_get_request({
+    main_endpoint: process.env.ROUTE_OF_CORE_FOR_STORE,
+    suffix_endpoint: "/list-session/" + payload.formUuid,
+    is_protected: true,
+    jwt_token: jwt_token
+  })
+})
+
+const core_show_session = (async (jwt_token, payload) => {
+  return await core_make_get_request({
+    main_endpoint: process.env.ROUTE_OF_CORE_FOR_STORE,
+    suffix_endpoint: "/show-session/" + payload.formUuid + "/" + payload.sessionUuid,
+    is_protected: true,
+    jwt_token: jwt_token
   })
 })
 
@@ -705,8 +733,12 @@ module.exports = {
   core_update_fields,
 
   core_store_data,
+  core_list_session,
+  core_show_session,
 
   core_find_me,
   core_list_kpi,
   core_fill_kpi,
+
+  core_get_kpi_data
 }

@@ -6,7 +6,11 @@
         <a class="navbar-brand mx-auto">
             Activité :
             <span class="text-white fw-bold">
-                <%= form.Project[0].name %>
+                <% if (locals.form.Project.length == 1) { %>
+                    <%= form.Project[0].name %>
+                <% } else { %>
+                    AUCUNE
+                <% } %>
             </span>
         </a>
         <div class="navbar-nav">

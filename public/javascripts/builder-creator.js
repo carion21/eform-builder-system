@@ -364,12 +364,12 @@ $(document).ready(function () {
     // Enregistrer les champs dans localStorage
     saveFormFieldsToLocalStorage(formFields);
 
-    let formProject = $('#formProject').val();
+    // let formProject = $('#formProject').val();
     let formName = $('#formName').val();
     let formDescription = $('#formDescription').val();
 
     let form = {
-      project: formProject,
+      // project: formProject,
       name: formName,
       description: formDescription,
       fields: formFields

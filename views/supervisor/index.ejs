@@ -26,7 +26,7 @@
             <p class="card-text text-muted">
               <%= p.description || 'Aucune description disponible.' %>
             </p>
-
+            <hr>
             <!-- Nombre d'avis en rouge et libellé en petit, aligné avec le bouton -->
             <div class="d-flex justify-content-between align-items-center mt-4">
               <div class="text-center">
@@ -38,12 +38,46 @@
                 </small>
               </div>
 
-              <!-- Bouton de formulaire aligné à droite -->
-              <a href="/supervisor/fillkpi/<%= p.id %>" 
-                target="_blank"
-                class="btn btn-outline-primary">
-                Renseigner les KPI
-              </a>
+              <div>
+                <!-- Bouton de formulaire aligné à droite -->
+                <% if (p.formUuid) { %>
+                  <a href="/supervisor/store/<%= p.formUuid %>" 
+                    target="_blank" 
+                    class="btn btn-outline-primary">
+                    Remplir le formulaire
+                  </a>
+                <% } else { %>
+                  <button class="btn btn-outline-primary" disabled>
+                    Formulaire non disponible
+                  </button>
+                <% } %>
+              </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <div class="text-center">
+                <!-- Bouton de formulaire aligné à droite -->
+                <a href="/supervisor/fillkpi/<%= p.id %>" 
+                  target="_blank"
+                  class="btn btn-outline-primary">
+                  Renseigner les KPI
+                </a>
+              </div>
+              <div>
+                <!-- Bouton de formulaire aligné à droite -->
+                <% if (p.formUuid) { %>
+                  <a href="/supervisor/list_session/<%= p.formUuid %>" 
+                    target="_blank"
+                    class="btn btn-warning">
+                    Consulter les données
+                  </a>
+                <% } else { %>
+                  <button class="btn btn-outline-warning" disabled>
+                    Données non disponibles
+                  </button>
+                <% } %>
+
+              </div>
             </div>
           </div>
         </div>

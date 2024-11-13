@@ -1,0 +1,118 @@
+<div class="container mt-5 mb-5 border border-secondary rounded">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-5 text-center">
+      Consulter les données du
+      <span class="text-primary">
+        <%= moment(datas.createdAt).format('DD/MM/YYYY à HH:mm') %>
+      </span>
+    </h2>
+    <a href="/supervisor/list_session/<%= form.uuid %>" class="btn btn-outline-danger">
+      <i class="fas fa-arrow-left"></i>
+      Retour
+    </a>
+  </div>
+  <hr>
+
+  <% const fields=form.Field %>
+  <% for (field of fields) { %>
+    <div class="card mb-3 mt-2" data-uuid="<%= field.uuid %>" style="transition: transform 0.2s;">
+      <div class="card-header">
+        <%= field.label %> -
+          <% if (field.optional) { %>
+            <span class="text-secondary">
+              ( Ce champ est optionnel )
+            </span>
+          <% } else { %>
+            <span class="text-danger">
+              ( Ce champ est obligatoire )
+            </span>
+          <% } %>
+      </div>
+      <div class="card-body">
+
+        <% if (
+          ['simple-text', 'email' , 'date' , 'uuid'].includes(field.fieldType.value)
+        ) { %>
+          <div>
+            <input type="<% if (field.fieldType.value === 'simple-text') { %>text<% } else { %><%= field.fieldType.value %><% } %>"
+              class="form-control form-control-lg" 
+              id="<%= field.uuid %>" 
+              placeholder="<%= field.exampleValue %>"
+              name="<%= field.slug %>"
+              value="<%= datas['slug_'+field.slug] %>"
+              <% if (!field.optional) { %> required <% } %>>
+          </div>
+        <% } %>
+
+        <% if (
+          ['number' ,'integer' , 'float'].includes(field.fieldType.value)
+        ) { %>
+          <div>
+            <input type="number"
+              class="form-control form-control-lg" id="<%= field.uuid %>" placeholder="<%= field.exampleValue %>"
+              name="<%= field.slug %>"
+              value="<%= datas['slug_'+field.slug] %>"
+              <% if (!field.optional) { %> required <% } %>>
+          </div>
+        <% } %>
+
+        <% if (
+          ['long-text'].includes(field.fieldType.value)
+        ) { %>
+          <div>
+            <textarea class="form-control form-control-lg" id="<%= field.uuid %>" placeholder="<%= field.exampleValue %>"
+              name="<%= field.slug %>"
+              rows="3" cols="50"
+              <% if (!field.optional) { %> required <% } %>><%= datas['slug_'+field.slug] %></textarea>
+          </div>
+        <% } %>
+
+        <% if (
+          ['select'].includes(field.fieldType.value)
+        ) { %>
+          <% const options = field.selectValues.split(';') %>
+          <div>
+            <select class="form-control form-control-lg" id="<%= field.uuid %>"
+              name="<%= field.slug %>"
+              <% if (!field.optional) { %> required <% } %>>
+              <option value="" selected disabled hidden>Choisissez une option</option>
+              <% for (option of options) { %>
+                <% if (option === datas['slug_'+field.slug]) { %>
+                  <option value="<%= option %>" selected><%= option %></option>
+                <% } else { %>
+                  <option value="<%= option %>"><%= option %></option>
+                <% } %>
+              <% } %>
+            </select>
+          </div>
+        <% } %>
+
+        <% if (
+          ['boolean'].includes(field.fieldType.value)
+        ) { %>
+          <div>
+            <input type="checkbox" class="form-check-input form-check-lg" id="<%= field.uuid %>"
+              name="<%= field.slug %>"
+              value="<% if (locals.rbody) { %><%= locals.rbody[field.slug] %><% } else { %><%= field.defaultValue %><% } %>"
+              <% if(datas['slug_'+field.slug] == 'true') { %> checked <% } %>
+              <% if (!field.optional) { %> required <% } %>>
+            <label class="form-check label" for="<%= field.uuid %>">
+              <%= field.label %>
+            </label>
+        <% } %>
+
+        <% if (field.description) { %>
+          <small id="<%= field.uuid %>Help" class="form-text text-muted">
+            <span class="text-warning">
+              !?>
+            </span>
+            <%= field.description %>
+          </small>
+        <% } %>
+
+      </div>
+    </div>
+  <% } %>
+
+</div>

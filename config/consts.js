@@ -81,10 +81,15 @@ class Consts {
             "types": ["string_email", "string"],
             "required": ["email", "password"]
         },
-        "new_form": {
+        "new_form_old": {
             "fields": ["project", "name", "description", "fields"],
             "types": ["string_integer", "string", "string", "array_of_object"],
             "required": ["project", "name", "fields"]
+        },
+        "new_form": {
+            "fields": ["name", "description", "fields"],
+            "types": ["string", "string", "array_of_object"],
+            "required": ["name", "fields"]
         },
         "edit_form": {
             "fields": ["formUuid", "name", "description", "fields"],

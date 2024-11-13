@@ -2,7 +2,7 @@ const express = require('express');
 
 const { getAppName, getMoment, isInteger } = require('../../config/utils');
 const { APP_NAME, APP_VERSION, APP_DESCRIPTION } = require('../../config/consts');
-const { core_find_me, core_list_kpi, core_find_project, core_fill_kpi } = require('../../config/global_functions');
+const { core_find_me, core_list_kpi, core_find_project, core_fill_kpi, core_get_kpi_data } = require('../../config/global_functions');
 const { parse } = require('dotenv');
 
 const router = express.Router();
@@ -29,6 +29,15 @@ router.get('/:projectId', async function (req, res, next) {
         kpis = r_core_kpis.data
       }
 
+      let kpiDatas = {}
+
+      let r_core_get_kpi_data = await core_get_kpi_data(req.session.jwt_token, {
+        projectId: parseInt(projectId)
+      })
+      if (r_core_get_kpi_data.success) {
+        kpiDatas = r_core_get_kpi_data.data
+      }
+
       res.render(
         "supervisor/fillkpi", {
         appName: APP_NAME,
@@ -38,6 +47,7 @@ router.get('/:projectId', async function (req, res, next) {
         user_data: req.session.user_data,
         project: project,
         kpis: kpis,
+        kpiDatas: kpiDatas
       })
     } else {
       console.log("Error while retrieving project: " + r_core_project.message)
@@ -79,6 +89,15 @@ router.post('/:projectId', async function (req, res, next) {
         kpis = r_core_kpis.data
       }
 
+      let kpiDatas = {}
+
+      let r_core_get_kpi_data = await core_get_kpi_data(req.session.jwt_token, {
+        projectId: parseInt(projectId)
+      })
+      if (r_core_get_kpi_data.success) {
+        kpiDatas = r_core_get_kpi_data.data
+      }
+
       let body = req.body
 
       let error = ""
@@ -90,7 +109,6 @@ router.post('/:projectId', async function (req, res, next) {
       for (let key of Object.keys(body)) {
         kpi_data.kpiDatas[key] = parseInt(body[key])
       }
-      // console.log('kpi_data', kpi_data);
 
       let r_core_fill_kpi = await core_fill_kpi(req.session.jwt_token, kpi_data)
 
@@ -104,6 +122,7 @@ router.post('/:projectId', async function (req, res, next) {
           user_data: req.session.user_data,
           project: project,
           kpis: kpis,
+          kpiDatas: kpiDatas,
           message: "Les KPIs ont été enregistrés avec succès."
         })
       } else {
@@ -120,6 +139,7 @@ router.post('/:projectId', async function (req, res, next) {
           user_data: req.session.user_data,
           project: project,
           kpis: kpis,
+          kpiDatas: kpiDatas,
           rbody: body,
           error: error
         })

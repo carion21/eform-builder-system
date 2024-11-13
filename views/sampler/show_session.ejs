@@ -1,0 +1,16 @@
+<% extend('./base_sampler') %>
+
+<!-- Form Viewer Section -->
+
+<% if (locals.form) { %>
+  <%- include('./components/show_session_form') %>
+<% } else { %>
+  <div class="container mt-5 mb-5">
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Erreur !</h4>
+      <p>Le formulaire demandé n'existe pas.</p>
+      <hr>
+      <p class="mb-0">Veuillez contacter l'administrateur pour plus d'informations.</p>
+    </div>
+  </div>
+<% } %>
