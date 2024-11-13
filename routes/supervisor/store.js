@@ -26,9 +26,6 @@ router.get('/:formUuid', async function (req, res, next) {
       ftypes = r_core_ftype.data
     }
 
-    console.log('form', form);
-    
-
     res.render(
       "supervisor/store", {
       appName: APP_NAME,
