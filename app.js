@@ -36,7 +36,7 @@ const modactuel = process.env.NODE_ENV || 'development'
 console.log('modactuel', modactuel);
 
 
-if (modactuel !== "development") {
+if (modactuel == "development") {
   const client = redis.createClient()
   app.use(session({
     secret: SESSION_SECRET,
