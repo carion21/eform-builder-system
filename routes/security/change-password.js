@@ -3,10 +3,10 @@ const axios = require('axios');
 
 const { getMoment, getDirectusUrl, getRouteDeBase, getCoreUrl } = require('../../config/utils');
 const { APP_NAME, APP_VERSION, APP_DESCRIPTION, DEFAULT_ROUTE_BUILD, DEFAULT_PROFILE_SUPERVISOR, DEFAULT_PROFILE_SAMPLER, DEFAULT_ROUTE_STORE, DEFAULT_PROFILE_ADMIN } = require('../../config/consts');
-const { control_service_data, core_signin, verify_jwt_token } = require('../../config/global_functions');
+const { control_service_data, core_signin, verify_jwt_token, core_change_password } = require('../../config/global_functions');
 const router = express.Router();
 
-const SERVICE_TYPE = "security_login"
+const SERVICE_TYPE = "security_change_password"
 
 const urlapi = getCoreUrl();
 const moment = getMoment();
@@ -29,7 +29,7 @@ router.get('/:jwt_token', async function (req, res, next) {
 
 
     res.render(
-      "security/login", {
+      "security/change-password", {
       appName: APP_NAME,
       appVersion: APP_VERSION,
       appDescription: APP_DESCRIPTION,
@@ -47,7 +47,7 @@ router.get('/', async function (req, res, next) {
     res.redirect(route)
   } else {
     res.render(
-      "security/login", {
+      "security/change-password", {
       appName: APP_NAME,
       appVersion: APP_VERSION,
       appDescription: APP_DESCRIPTION,
@@ -74,33 +74,21 @@ router.post('/:jwt_token', async function (req, res, next) {
     let bcontrol = control_service_data(SERVICE_TYPE, body)
 
     if (bcontrol.success) {
-      let r_core_user = await core_signin(body)
 
-      if (r_core_user.success) {
-        const user_data = r_core_user.data.data.user
-        const profile_value = user_data.profile.value
+      if (body.newpassword == body.cnfpassword) {
+        let r_core_user = await core_change_password(jwt_token, {
+          oldPassword: body.oldpassword,
+          newPassword: body.newpassword,
+        })
 
-        if (
-          [
-            DEFAULT_PROFILE_ADMIN,
-            DEFAULT_PROFILE_SUPERVISOR,
-            DEFAULT_PROFILE_SAMPLER
-          ].includes(profile_value)
-        ) {
-          let route = '/' + profile_value
-          console.log("Redirecting to: " + route);
-
-          req.session.user_data = r_core_user.data.data.user
-          req.session.jwt_token = r_core_user.data.data.jwt
-
-          res.redirect(route)
+        if (r_core_user.success) {
+          res.redirect("/security/login/" + jwt_token)
+        } else {
+          error = r_core_user.message
         }
 
-        else {
-          error = "Votre profil n'est pas autorisé à accéder à l'application"
-        }
       } else {
-        error = r_core_user.message
+        error = "Les mots de passe ne correspondent pas"
       }
 
     } else {
@@ -108,10 +96,9 @@ router.post('/:jwt_token', async function (req, res, next) {
     }
 
     if (error) {
-      console.log('rbody', body);
 
       res.render(
-        "security/login", {
+        "security/change-password", {
         appName: APP_NAME,
         appVersion: APP_VERSION,
         appDescription: APP_DESCRIPTION,
@@ -134,38 +121,21 @@ router.post('/', async function (req, res, next) {
   let error = ""
 
   if (bcontrol.success) {
-    let r_core_user = await core_signin(body)
 
-    if (r_core_user.success) {
-      const user_data = r_core_user.data.data.user
-      const profile_value = user_data.profile.value
+    if (body.newpassword == body.cnfpassword) {
+      let r_core_user = await core_change_password(jwt_token, {
+        oldPassword: body.oldpassword,
+        newPassword: body.newpassword,
+      })
 
-      if (user_data.isNeedChangePass) {
-        res.redirect("/security/change-password/" + r_core_user.data.data.jwt)
+      if (r_core_user.success) {
+        res.redirect("/security/login")
       } else {
-        if (
-          [
-            DEFAULT_PROFILE_ADMIN,
-            DEFAULT_PROFILE_SUPERVISOR,
-            DEFAULT_PROFILE_SAMPLER
-          ].includes(profile_value)
-        ) {
-          let route = '/' + profile_value
-          console.log("Redirecting to: " + route);
-
-          req.session.user_data = r_core_user.data.data.user
-          req.session.jwt_token = r_core_user.data.data.jwt
-
-          res.redirect(route)
-        }
-
-        else {
-          error = "Votre profil n'est pas autorisé à accéder à l'application"
-        }
+        error = r_core_user.message
       }
 
     } else {
-      error = r_core_user.message
+      error = "Les mots de passe ne correspondent pas"
     }
 
   } else {

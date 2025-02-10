@@ -561,6 +561,16 @@ const core_make_upload_request = (async (
   return result
 })
 
+const core_change_password = (async (jwt_token, payload) => {
+  return await core_make_post_request({
+    main_endpoint: process.env.ROUTE_OF_CORE_TO_CHANGE_PASSWORD,
+    suffix_endpoint: "",
+    is_protected: true,
+    jwt_token: jwt_token,
+    payload: payload
+  })
+})
+
 const core_list_field_type = (async (jwt_token) => {
   return await core_make_get_request({
     main_endpoint: process.env.ROUTE_OF_CORE_FOR_FIELD_TYPE,
@@ -717,6 +727,8 @@ module.exports = {
   control_service_data,
   verify_jwt_token,
   core_signin,
+  core_change_password,
+
   core_make_get_request,
   core_make_post_request,
   core_make_patch_request,

@@ -22,6 +22,7 @@ class Consts {
     static DEFAULT_PROFILE_ADMIN = "admin";
     static DEFAULT_PROFILE_SUPERVISOR = "supervisor";
     static DEFAULT_PROFILE_SAMPLER = "sampler";
+    static DEFAULT_PROFILE_VIEWER = "viewer";
 
 
     static DEFAULT_PROFILES = [
@@ -67,6 +68,7 @@ class Consts {
     static SERVICE_TYPES = [
         "undefined",
         "security_login",
+        "security_change_password",
         "admin_search_spot",
         "admin_search_top",
         "admin_set_settings",
@@ -80,6 +82,11 @@ class Consts {
             "fields": ["email", "password"],
             "types": ["string_email", "string"],
             "required": ["email", "password"]
+        },
+        "security_change_password": {
+            "fields": ["email", "oldpassword", "newpassword", "cnfpassword"],
+            "types": ["string_email", "string", "string", "string"],
+            "required": ["email", "oldpassword", "newpassword", "cnfpassword"]
         },
         "new_form_old": {
             "fields": ["project", "name", "description", "fields"],
